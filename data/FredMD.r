@@ -9,7 +9,7 @@
 library(fbi)
 
 md = fredmd(
-    file = "./data/2026-01-MD.csv",
+    file = "./data/2026-02-MD.csv",
     date_start = as.Date("1986-01-01"),
     date_end = as.Date("2026-01-01"),
     transform = TRUE
