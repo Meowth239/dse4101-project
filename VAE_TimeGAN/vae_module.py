@@ -443,8 +443,13 @@ def _vae_loss(
     """
     recon_loss = nn.functional.mse_loss(x_hat, x, reduction="mean")
 
-    # KL divergence: -0.5 * sum(1 + log_var - mu^2 - exp(log_var))
-    kl_loss = -0.5 * torch.mean(1 + log_var - mu.pow(2) - log_var.exp())
+    # Compute per-dimension KL: shape (batch_size, latent_dim)
+    kl_per_dim = -0.5 * (1 + log_var - mu.pow(2) - log_var.exp())
+
+    # CORRECT ORDER: mean over batch first -> shape (latent_dim,)
+    # then clamp per dimension, then sum
+    free_bits = 0.1  # 0.1 nats per dimension = 0.8 nats minimum total
+    kl_loss = torch.clamp(kl_per_dim.mean(dim=0), min=free_bits).sum()
 
     total_loss = recon_loss + kl_weight * kl_loss
     return total_loss, recon_loss, kl_loss
