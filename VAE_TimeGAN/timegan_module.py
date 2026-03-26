@@ -333,7 +333,7 @@ class TimeGAN(nn.Module):
             hidden_dim=hid_dim,
             output_dim=emb_dim,
             num_layers=n_layers,
-            activation=nn.Sigmoid(),
+            activation=nn.Tanh(),
         )
 
         # Recovery: embedding space -> data space
@@ -343,7 +343,7 @@ class TimeGAN(nn.Module):
             hidden_dim=hid_dim,
             output_dim=input_dim,
             num_layers=n_layers,
-            activation=nn.Sigmoid(),
+            activation=nn.Tanh(),
         )
 
         # Generator: noise space -> embedding space
@@ -474,7 +474,7 @@ def _generator_loss(
     g_loss_v = g_loss_v1 + g_loss_v2
 
     # Combined
-    return g_loss_u + gamma * g_loss_u_e + 100 * supervised_loss + 100 * g_loss_v
+    return g_loss_u + gamma * g_loss_u_e + 5 * supervised_loss + 5 * g_loss_v
 
 
 def _discriminator_loss(
@@ -487,7 +487,7 @@ def _discriminator_loss(
     - Real embeddings should be classified as real (1)
     - Synthetic embeddings (from supervisor) should be classified as fake (0)
     - Raw generator embeddings (before supervisor) should be fake (0)
-    Only update if discriminator is not already too strong (loss > 0.15).
+    Only update if discriminator is not already too strong (loss > 0.5).
     """
     ones = torch.ones_like(y_real)
     zeros_fake = torch.zeros_like(y_fake)
@@ -656,7 +656,7 @@ def _train_supervised_phase(
             e_hat = model.generator(z)
 
             # Supervisor predicts next-step transitions
-            h_hat_supervise = model.supervisor(e_hat)
+            h_hat_supervise = model.supervisor(h)
 
             loss = _supervised_loss(h, h_hat_supervise)
 
@@ -728,32 +728,33 @@ def _train_joint_phase(
             batch = batch.to(device)
             batch_size, seq_len, _ = batch.shape
 
-            # ---- Generator + Supervisor step ----
-            z = model.generate_noise(batch_size, seq_len, device)
-            e_hat = model.generator(z)
-            h_hat = model.supervisor(e_hat)
+            # ---- Generator + Supervisor step (x2 per discriminator update) ----
+            for _ in range(2):
+                z = model.generate_noise(batch_size, seq_len, device)
+                e_hat = model.generator(z)
+                h_hat = model.supervisor(e_hat)
 
-            # Also get discriminator outputs for generator loss
-            y_fake = model.discriminator(h_hat)
-            y_fake_e = model.discriminator(e_hat)
+                # Also get discriminator outputs for generator loss
+                y_fake = model.discriminator(h_hat)
+                y_fake_e = model.discriminator(e_hat)
 
-            with torch.no_grad():
-                h = model.embedder(batch)
+                with torch.no_grad():
+                    h = model.embedder(batch)
 
-            h_hat_supervise = model.supervisor(e_hat.detach())
-            sup_loss = _supervised_loss(h, h_hat_supervise)
+                h_hat_supervise = model.supervisor(e_hat.detach())
+                sup_loss = _supervised_loss(h, h_hat_supervise)
 
-            x_hat = model.recovery(h_hat)
+                x_hat = model.recovery(h_hat)
 
-            g_loss = _generator_loss(
-                y_fake, y_fake_e, h, h_hat, batch, x_hat,
-                sup_loss, config.gamma
-            )
+                g_loss = _generator_loss(
+                    y_fake, y_fake_e, h, h_hat, batch, x_hat,
+                    sup_loss, config.gamma
+                )
 
-            opt_g.zero_grad()
-            g_loss.backward()
-            nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-            opt_g.step()
+                opt_g.zero_grad()
+                g_loss.backward()
+                nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                opt_g.step()
 
             # ---- Embedder + Recovery step ----
             h = model.embedder(batch)
@@ -783,9 +784,9 @@ def _train_joint_phase(
 
             d_loss = _discriminator_loss(y_real, y_fake_d, y_fake_e_d)
 
-            # Conditional discriminator update — prevents it from overpowering
-            # generator during early joint training
-            if d_loss.item() > 0.15:
+            # ---- Discriminator step ----
+            # Update discriminator every other epoch only
+            if epoch % 2 == 0:
                 opt_d.zero_grad()
                 d_loss.backward()
                 nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)

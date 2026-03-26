@@ -401,6 +401,7 @@ class VAE(nn.Module):
             Encoder log-variance, shape (..., latent_dim).
         """
         mu, log_var = self.encoder(x)
+        log_var = torch.clamp(log_var, min=-4.0, max=4.0)
         z = self.reparameterise(mu, log_var)
         x_hat = self.decoder(z)
         return x_hat, mu, log_var

@@ -1,0 +1,96 @@
+=================================================================
+  SYNTHETIC TIME SERIES EVALUATION REPORT
+  Generated: 2026-03-27 00:39:40
+=================================================================
+
+1. STATISTICAL MOMENTS
+-----------------------------------------------------------------
+
+  Variable: CPI
+                   Mean        Std        Min        Max
+  Real           0.6403     0.0831     0.0000     1.0000
+  Synthetic      0.6455     0.0006     0.6446     0.6479
+  Std ratio (synth/real): 0.0071  (1.0 = perfect match)
+
+  Variable: TB3MS
+                   Mean        Std        Min        Max
+  Real           0.5530     0.0691     0.0000     1.0000
+  Synthetic      0.5631     0.0001     0.5628     0.5636
+  Std ratio (synth/real): 0.0019  (1.0 = perfect match)
+
+  Variable: M1
+                   Mean        Std        Min        Max
+  Real           0.4109     0.0948     0.0000     1.0000
+  Synthetic      0.4131     0.0003     0.4128     0.4143
+  Std ratio (synth/real): 0.0034  (1.0 = perfect match)
+
+  Variable: M2
+                   Mean        Std        Min        Max
+  Real           0.3344     0.1328     0.0000     1.0000
+  Synthetic      0.3401     0.0001     0.3398     0.3404
+  Std ratio (synth/real): 0.0010  (1.0 = perfect match)
+
+  Variable: AUD_USD
+                   Mean        Std        Min        Max
+  Real           0.7132     0.1089     0.0000     1.0000
+  Synthetic      0.7233     0.0004     0.7227     0.7252
+  Std ratio (synth/real): 0.0040  (1.0 = perfect match)
+
+  Variable: CAD_USD
+                   Mean        Std        Min        Max
+  Real           0.3421     0.0921     0.0000     1.0000
+  Synthetic      0.3611     0.0002     0.3603     0.3612
+  Std ratio (synth/real): 0.0020  (1.0 = perfect match)
+
+  Variable: NZD_USD
+                   Mean        Std        Min        Max
+  Real           0.5897     0.1498     0.0000     1.0000
+  Synthetic      0.5766     0.0009     0.5760     0.5802
+  Std ratio (synth/real): 0.0060  (1.0 = perfect match)
+
+  Variable: ZAR_USD
+                   Mean        Std        Min        Max
+  Real           0.4014     0.1073     0.0000     1.0000
+  Synthetic      0.4146     0.0004     0.4138     0.4164
+  Std ratio (synth/real): 0.0039  (1.0 = perfect match)
+
+  Variable: WTI_price
+                   Mean        Std        Min        Max
+  Real           0.4662     0.1137     0.0000     1.0000
+  Synthetic      0.4784     0.0007     0.4779     0.4811
+  Std ratio (synth/real): 0.0062  (1.0 = perfect match)
+
+2. ACF COMPARISON
+-----------------------------------------------------------------
+  Mean ACF MAE across all variables: 0.2021
+  CPI: ACF MAE = 0.2292
+  TB3MS: ACF MAE = 0.1178
+  M1: ACF MAE = 0.2744
+  M2: ACF MAE = 0.2455
+  AUD_USD: ACF MAE = 0.1393
+  CAD_USD: ACF MAE = 0.2448
+  NZD_USD: ACF MAE = 0.2028
+  ZAR_USD: ACF MAE = 0.1712
+  WTI_price: ACF MAE = 0.1941
+
+3. CROSS-CORRELATION MATRIX DISTANCE
+-----------------------------------------------------------------
+  Frobenius norm: 6.3835
+  (0.0 = perfect match | >0.5 = meaningful divergence)
+
+4. MAXIMUM MEAN DISCREPANCY (MMD)
+-----------------------------------------------------------------
+  MMD: 0.437428
+  Kernel bandwidth: 0.9848
+  Samples used: 312
+  (0.0 = identical distributions)
+
+5. DISCRIMINATIVE SCORE
+-----------------------------------------------------------------
+  Mean accuracy: 1.0000 (+/- 0.0000)
+  Per-split: [1.0, 1.0, 1.0]
+  (0.5 = indistinguishable | 1.0 = perfectly distinguishable)
+
+=================================================================
+  END OF REPORT
+=================================================================
