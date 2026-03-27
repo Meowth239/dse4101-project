@@ -1,5 +1,23 @@
+import numpy as np
+import tensorflow as tf
+import random
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import itertools
+from sklearn.preprocessing import StandardScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
+from sklearn.metrics import mean_squared_error
 
 
+def set_seed(seed=42):
+    np.random.seed(seed)
+    random.seed(seed)
+    tf.random.set_seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
 
 #################################################################################################
 # this is a more complex LSTM architecture with two LSTM layers and dropout, 
