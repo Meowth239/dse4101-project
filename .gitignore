@@ -1,5 +1,13 @@
-.env
-.venv
-.vscode
+# Python
+venv/
+.venv/
+env/
 __pycache__/
 *.pyc
+*.pyo
+.env
+
+# VSCode - these are machine-specific
+.vscode/setting.json
+.vscode/launch.json
+.vscode/
