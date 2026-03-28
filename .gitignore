@@ -6,6 +6,15 @@ __pycache__/
 *.pyc
 *.pyo
 .env
+.DS_Store
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv\
+env/
+.vscode/
 
 # VSCode - these are machine-specific
 .vscode/setting.json
