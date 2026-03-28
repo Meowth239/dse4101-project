@@ -203,3 +203,133 @@ def expanding_window_lstm_forecast(
         results.append(result)
 
     return pd.DataFrame(results)
+
+#################################################################################################
+def expanding_window_lstm_forecast2(
+    df,
+    feature_cols,
+    target_col,
+    date_col=None,
+    train_start_idx=0,
+    initial_train_size=200,
+    end_idx=None,
+    lookback=20,
+    units=50,
+    dropout=0.2,
+    epochs=20,
+    batch_size=32,
+    verbose=0,
+    scale=True,
+    seed=42
+):
+    """
+    Expanding window one-step-ahead forecast using LSTM.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        Full dataframe in time order.
+    feature_cols : list
+        Input feature columns.
+    target_col : str
+        Target column to predict.
+    date_col : str or None
+        Optional date column to keep in output.
+    train_start_idx : int
+        First row allowed in the training sample.
+    initial_train_size : int
+        First forecast origin. Training uses rows from train_start_idx
+        up to initial_train_size - 1.
+    end_idx : int or None
+        Forecast until this index (exclusive). If None, forecast to end of df.
+    lookback : int
+        Number of past timesteps per sequence.
+    units, dropout, epochs, batch_size : model/training params
+    verbose : int
+        Keras fit verbosity.
+    scale : bool
+        Whether to fit StandardScaler on training data at each step.
+    seed : int
+        Random seed.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with forecast date, actual, predicted.
+    """
+    set_seed(seed)
+
+    results = []
+    df = df.copy().reset_index(drop=True)
+
+    start_idx = max(initial_train_size, train_start_idx + lookback)
+    stop_idx = end_idx if end_idx is not None else len(df)
+
+    for test_idx in range(start_idx, stop_idx):
+        # training data now starts at train_start_idx instead of 0
+        train_df = df.iloc[train_start_idx:test_idx].copy()
+
+        if scale:
+            x_scaler = StandardScaler()
+            y_scaler = StandardScaler()
+
+            train_df[feature_cols] = x_scaler.fit_transform(train_df[feature_cols])
+            train_df[[target_col]] = y_scaler.fit_transform(train_df[[target_col]])
+
+        # create sequences from training data only
+        X_train, y_train = create_sequences(train_df, feature_cols, target_col, lookback)
+
+        if len(X_train) == 0:
+            continue
+
+        # latest sequence for prediction still comes from actual history
+        hist_window = df.iloc[test_idx - lookback:test_idx].copy()
+
+        if scale:
+            hist_window[feature_cols] = x_scaler.transform(hist_window[feature_cols])
+
+        X_test = hist_window[feature_cols].values.reshape(1, lookback, len(feature_cols))
+
+        tf.keras.backend.clear_session()
+
+        model = build_lstm_model(
+            lookback=lookback,
+            n_features=len(feature_cols),
+            units=units,
+            dropout=dropout
+        )
+
+        early_stop = EarlyStopping(
+            monitor="loss",
+            patience=5,
+            restore_best_weights=True
+        )
+
+        model.fit(
+            X_train,
+            y_train,
+            epochs=epochs,
+            batch_size=batch_size,
+            verbose=verbose,
+            callbacks=[early_stop]
+        )
+
+        pred = model.predict(X_test, verbose=0).flatten()[0]
+
+        if scale:
+            pred = y_scaler.inverse_transform([[pred]])[0, 0]
+
+        actual = df.iloc[test_idx][target_col]
+
+        result = {
+            "test_index": test_idx,
+            "actual": actual,
+            "predicted": pred
+        }
+
+        if date_col is not None:
+            result[date_col] = df.iloc[test_idx][date_col]
+
+        results.append(result)
+
+    return pd.DataFrame(results)
