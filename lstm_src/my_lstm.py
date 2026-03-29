@@ -200,6 +200,10 @@ def expanding_window_lstm_forecast(
             patience=5,
             restore_best_weights=True
         )
+        #print("train_df length:", len(train_df))
+        #print("X_train shape:", X_train.shape)
+        #print("y_train shape:", y_train.shape)
+        #print("lookback:", lookback)
 
         model.fit(
             X_train,
