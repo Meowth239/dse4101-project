@@ -74,7 +74,7 @@ def create_sequences(data, feature_cols, target_col, lookback):
 # for jittering
 
 def create_jittered_sequences(data, feature_cols, target_col, lookback,
-                    jitter_std=0.3, jitter_cols=None, num_samples=0):
+                    jitter_std=0.03, jitter_cols=None, num_samples=0):
     """
     Creates sequences for time series modeling with optional internal jittering on X.
 
@@ -83,7 +83,7 @@ def create_jittered_sequences(data, feature_cols, target_col, lookback,
         feature_cols: List of feature column names.
         target_col:   Target column name.
         lookback:     Number of past timesteps to include in each sequence.
-        jitter_std:   Noise scale as a fraction of each column's std (default 0.3).
+        jitter_std:   Noise scale as a fraction of each column's std (default 0.03).
                       Set to 0 to disable jittering.
         jitter_cols:  Indices (int) or names (str) of feature_cols to jitter.
                       If None, jitter is applied to all features.
