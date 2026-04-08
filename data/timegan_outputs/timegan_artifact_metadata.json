@@ -1,0 +1,26 @@
+{
+  "data_path": "../data/final_data.csv",
+  "date_col": "Date",
+  "y_col": "wti_ret",
+  "feature_cols": [
+    "AUD_USD_ret",
+    "CAD_USD_ret",
+    "NZD_USD_ret",
+    "ZAR_USD_ret",
+    "CPI",
+    "TB3MS",
+    "M1",
+    "M2",
+    "wti_ret"
+  ],
+  "params": {
+    "sequence_length": 24,
+    "noise_dim": 32,
+    "layers_dim": 128,
+    "batch_size": 64,
+    "learning_rate": 0.0005,
+    "epochs": 1200
+  },
+  "train_start": "1990-01-01",
+  "train_end": "2018-12-01"
+}
