@@ -121,6 +121,8 @@ Pipeline steps:
 
 Output: `data/final_data_with_VAETIMEGAN.csv`
 
+Training of the model was conducted in `VAE_TimeGAN/test_ydata.ipynb`. `VAE_TimeGAN/test_custom.ipynb` uses my own custom implementation for TimeGAN.
+
 ---
 
 ## 4. LSTM Forecasting
