@@ -19,6 +19,13 @@ dse4101-project/
 │   ├── final_data_with_VAETIMEGAN.csv   # VAE-TimeGAN augmented data (committed)
 │   └── timegan_outputs/           # TimeGAN synthetic data and model checkpoint
 │
+│── benchmark/ 
+│   ├── benchmark_models.ipynb     # benchmark econometric models
+│   ├── results/                   # results from benchmark econometric models
+│
+│── forecast_evaluation/ 
+│   ├── forecast_eval.ipynb        # out of sample evaluation analysis
+│
 ├── VAE_TimeGAN/                   # VAE + TimeGAN synthesis pipeline
 │   ├── data_pipeline.py           # Windowing + MinMaxScaler
 │   ├── vae_module.py              # Variational Autoencoder
