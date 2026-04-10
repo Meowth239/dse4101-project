@@ -1,0 +1,69 @@
+{
+  "config": {
+    "data_path": "../data/final_data.csv",
+    "date_col": "Date",
+    "y_col": "wti_ret",
+    "train_start": "1990-01-01",
+    "train_end": "2018-12-01",
+    "eval_start": "2019-01-01",
+    "eval_end": "2026-01-01",
+    "sequence_length": 24,
+    "n_synth_eval": null,
+    "n_synth_export": 50,
+    "noise_dim": 32,
+    "layers_dim": 128,
+    "batch_size": 64,
+    "learning_rate": 0.0005,
+    "epochs": 1200,
+    "use_legacy_adam": true,
+    "patch_fast_train_loop": true,
+    "embedding_steps_ratio": 0.6,
+    "supervisor_steps_ratio": 0.6,
+    "joint_steps_ratio": 1.0,
+    "tune_grid": {
+      "sequence_length": [
+        12,
+        24,
+        36
+      ],
+      "noise_dim": [
+        16,
+        32
+      ],
+      "layers_dim": [
+        64,
+        128
+      ],
+      "batch_size": [
+        32,
+        64
+      ],
+      "learning_rate": [
+        0.001,
+        0.0005
+      ],
+      "epochs": [
+        800
+      ]
+    },
+    "max_tune_runs": 6,
+    "random_seed": 42,
+    "output_dir": "../data/timegan_outputs"
+  },
+  "params": {
+    "sequence_length": 24,
+    "noise_dim": 32,
+    "layers_dim": 128,
+    "batch_size": 64,
+    "learning_rate": 0.0005,
+    "epochs": 1200
+  },
+  "eval_summary": {
+    "avg_ks": 0.1482228195937873,
+    "avg_wasserstein": 0.019445750731768366,
+    "corr_fro": 2.205039698411353,
+    "acf_l2_y": 0.4326247552072517,
+    "disc_auc": 0.551246537396122,
+    "disc_gap_abs_auc_minus_0_5": 0.05124653739612195
+  }
+}

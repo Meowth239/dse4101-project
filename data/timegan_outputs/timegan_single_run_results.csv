@@ -1,0 +1,2 @@
+sequence_length,noise_dim,layers_dim,batch_size,learning_rate,epochs,avg_ks,avg_wasserstein,corr_fro,acf_l2_y,disc_auc,disc_gap_abs_auc_minus_0_5,composite_lower_better
+24,16,64,64,0.0005,500,0.1484468339307049,0.020077382784017907,2.0579618469245493,0.4624694590746664,0.5955678670360111,0.09556786703601106,2.7845233897499493
