@@ -49,6 +49,8 @@ dse4101-project/
 │   ├── outofsampleanalysis.ipynb  # Final results and comparison plots
 │   └── results/                   # Output CSVs (committed)
 │
+├── report/                         
+│   └── final_report.pdf           # final report
 └── src/                           # Exploratory / legacy notebooks
 ```
 
