@@ -135,10 +135,14 @@ Run each notebook in `lstm_src/` to train and evaluate the LSTM under each confi
 
 | Configuration | Notebook |
 |---|---|
-| Univariate baseline (WTI only) | `lstm-1.ipynb` |
-| Univariate + Jittering | `lstm-1-jitter.ipynb` |
-| Univariate + TimeGAN | `lstm-1-timegan.ipynb` |
-| Univariate + VAE-TimeGAN | `lstm-1-vaetimegan.ipynb` |
+| Univariate baseline (With WTI only) | `lstm_update.ipynb` |
+| Univariate + Jittering | `lstm_update_jitter.ipynb` |
+| Univariate + TimeGAN | `lstm_update_timegan.ipynb` |
+| Univariate + VAE-TimeGAN | `lstm_update_vaetimegan.ipynb` |
+| Bivariate baseline | `lstm-1.ipynb` |
+| Bivariate + Jittering | `lstm-1-jitter.ipynb` |
+| Bivariate + TimeGAN | `lstm-1-timegan.ipynb` |
+| Bivariate + VAE-TimeGAN | `lstm-1-vaetimegan.ipynb` |
 | Multivariate baseline (8 vars) | `lstm-8.ipynb` |
 | Multivariate + Jittering | `lstm-8-jitter.ipynb` |
 | Multivariate + TimeGAN | `lstm-8-timegan.ipynb` |
